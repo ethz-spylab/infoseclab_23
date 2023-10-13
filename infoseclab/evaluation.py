@@ -253,6 +253,7 @@ def eval_mia(
     color = None,
     plot_decorations: bool = False
 ):
+    target_fpr = 0.01
     if plot_decorations:
         # Plot TPR = FPR line
         ax.plot([0.0, 1.0], [0.0, 1.0], lw=0.5, c="k", ls="--")
@@ -264,13 +265,13 @@ def eval_mia(
     ax.set_xlabel("FPR")
     ax.set_ylabel("TPR")
 
-    # Determine largest threshold with FPR <= 0.5% and print corresponding TPR
-    target_fpr_idx = np.argmax(np.where(fpr <= 0.005, fpr, np.zeros_like(fpr)))
-    print(f"{label} TPR @ FPR 0.5%: {tpr[target_fpr_idx]*100:.2f}%")
+    # Determine largest threshold with FPR <= target and print corresponding TPR
+    target_fpr_idx = np.argmax(np.where(fpr <= target_fpr, fpr, np.zeros_like(fpr)))
+    print(f"{label} TPR @ FPR {target_fpr*100:.2f}%: {tpr[target_fpr_idx]*100:.2f}%")
 
     if plot_decorations:
         # Mark target FPR
-        ax.axvline(0.005, lw=0.5, c="k", ls="--")
+        ax.axvline(target_fpr, lw=0.5, c="k", ls="--")
 
     ax.set_ylim(top=1e0)
     ax.set_xlim(right=1e0)
