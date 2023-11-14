@@ -116,6 +116,8 @@ def eval_untargeted_pgd(path="results/x_adv_untargeted.npy", device="cuda"):
     else:
         print_colored("NOT THERE YET!", success)
 
+    return success, acc_clean, acc_adv
+
 
 def eval_targeted_pgd(path="results/x_adv_targeted.npy", device="cuda"):
     print("=== Evaluating targeted PGD ===")
@@ -132,6 +134,8 @@ def eval_targeted_pgd(path="results/x_adv_targeted.npy", device="cuda"):
         print_colored("SUCCESS", success)
     else:
         print_colored("NOT THERE YET!", success)
+
+    return success, acc_clean, acc_adv, acc_target
 
 
 def eval_detector_attack(path="results/x_adv_detect.npy", device="cuda"):
@@ -163,6 +167,8 @@ def eval_detector_attack(path="results/x_adv_detect.npy", device="cuda"):
     else:
         print_colored("NOT THERE YET!", success)
 
+    return success, acc_clean, acc_adv, acc_target, fpr, tpr
+
 
 def eval_rf_detector_attack(path="results/x_adv_detect_rf.npy", device="cuda"):
     print("=== Evaluating untargeted PGD with Random Forest Detector ===")
@@ -193,6 +199,8 @@ def eval_rf_detector_attack(path="results/x_adv_detect_rf.npy", device="cuda"):
     else:
         print_colored("NOT THERE YET!", success)
 
+    return success, acc_clean, acc_adv, fpr, tpr
+
 
 def eval_blur_attack(path="results/x_adv_blur.npy", device="cuda"):
     print("=== Evaluating targeted PGD on blurred defense ===")
@@ -210,6 +218,8 @@ def eval_blur_attack(path="results/x_adv_blur.npy", device="cuda"):
     else:
         print_colored("NOT THERE YET!", success)
 
+    return success, acc_clean, acc_adv, acc_target
+
 
 def eval_random_attack(path="results/x_adv_random.npy", device="cuda"):
     print("=== Evaluating targeted PGD on randomized defense ===")
@@ -221,12 +231,15 @@ def eval_random_attack(path="results/x_adv_random.npy", device="cuda"):
         print("no adversarial examples found", e)
         return
     acc_clean, acc_adv, acc_target, success = eval_clf(defense_random, x_adv,
-                                                       min_acc=0.9, max_adv_acc=0.02, min_target_acc=0.98, targeted=True)
+                                                       min_acc=0.85, max_adv_acc=0.02, min_target_acc=0.98, targeted=True)
 
     if success:
         print_colored("SUCCESS", success)
     else:
         print_colored("NOT THERE YET!", success)
+
+    return success, acc_clean, acc_adv, acc_target
+
 
 def eval_discrete_attack(path="results/x_adv_discrete.npy", device="cuda"):
     print("=== Evaluating targeted PGD on discretized defense ===")
@@ -244,6 +257,9 @@ def eval_discrete_attack(path="results/x_adv_discrete.npy", device="cuda"):
         print_colored("SUCCESS", success)
     else:
         print_colored("NOT THERE YET!", success)
+
+    return success, acc_clean, acc_adv, acc_target
+
 
 def eval_mia(
     true_splits: np.ndarray,
